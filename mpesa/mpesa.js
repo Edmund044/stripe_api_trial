@@ -85,7 +85,7 @@ router.post('/mpesa', mpesa.getOAuthToken, async (req, res, next) => {
   } catch (err) {
     return res.send({
       success: false,
-      message:err['response']['statusText'],
+      message: err.response.statusText,
     });
   }
 });

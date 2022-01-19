@@ -1,6 +1,6 @@
 const express = require('express');
 
-const router = express.Router();
+const app = express.Router();
 require('dotenv').config();
 const axios = require('axios').default;
 require('dotenv').config();
@@ -9,20 +9,20 @@ const fs = require('fs');
 const path = require('path');
 // const mpesa = path.join(__dirname, '/controllers/mpesa');
 // console.log(__dirname);
-const mpesa = require('../../../controllers/mpesa');
+const mpesa = require('../../../../controllers/mpesa');
 
 // route to get the auth token
-router.get('/get-auth-token', mpesa.getOAuthToken);
+app.get('/get-auth-token', mpesa.getOAuthToken);
 
 // lipa na mpesa online
-router.post('/stk', mpesa.getOAuthToken, async (req, res, next) => {
+app.post('/stk', mpesa.getOAuthToken, async (req, res, next) => {
   const data = req.body;
   console.log(data);
   const { token } = req;
   const auth = `Bearer ${token}`;
 
   // getting the timestamp
-  const { timestamp } = require('../../../timestamp/timestamp');
+  const { timestamp } = require('../../../../timestamp/timestamp');
 
   const url = process.env.lipa_na_mpesa_url;
   const bs_short_code = process.env.lipa_na_mpesa_shortcode;
@@ -75,6 +75,6 @@ router.post('/stk', mpesa.getOAuthToken, async (req, res, next) => {
 //
 
 // callback url
-router.post('/lipa-na-mpesa-callback', mpesa.lipaNaMpesaOnlineCallback);
+app.post('/lipa-na-mpesa-callback', mpesa.lipaNaMpesaOnlineCallback);
 
-module.exports = router;
+module.exports = app;

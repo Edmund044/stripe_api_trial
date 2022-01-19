@@ -13,8 +13,9 @@ require('dotenv').config();
 // const  mechanicProfile = require('./routes/mechanic/profile/profile');
 
 // mpesa
-const mpesa = require('./routes/Kenya/mpesa/mpesa');
-
+const mpesa = require('./routes/Kenya/mpesa/stkPush/stkPush');
+// stripe
+const stripe = require('./routes/Kenya/stripe/stripe');
 app.use(cors({ origin: true }));
 app.use(
   bodyParser.urlencoded({
@@ -60,7 +61,8 @@ app.use((req, res, next) => {
 });
 
 // use it in a route
-app.use('/api/v1/payments', mpesa);
+app.use('/api/v1/payments/mpesa', mpesa);
+app.use('/api/v1/payments/stripe', stripe);
 
 // Incase of wrong url
 app.use((req, res, next) => {
