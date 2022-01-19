@@ -33,8 +33,8 @@ router.post('/mpesa', mpesa.getOAuthToken, async (req, res, next) => {
   const partyB = process.env.lipa_na_mpesa_shortcode;
   const phoneNumber = data.phone; // "254725209942"; //should follow the format:2547xxxxxxxx
   const callBackUrl = 'https://quick-garage-api.herokuapp.com/mpesa/lipa-na-mpesa-callback';
-  const accountReference = 'INEX TENDER DOTE';
-  const transaction_desc = 'Payment for successful match with the closest mechanic.';
+  const accountReference = 'PAYLEND LTD';
+  const transaction_desc = 'Repayment of Paylend Okoa loan.';
 
   try {
     const { data } = await axios

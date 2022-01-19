@@ -15,7 +15,7 @@ const mpesa = require('../../../controllers/mpesa');
 router.get('/get-auth-token', mpesa.getOAuthToken);
 
 // lipa na mpesa online
-router.post('/mpesa', mpesa.getOAuthToken, async (req, res, next) => {
+router.post('/stk', mpesa.getOAuthToken, async (req, res, next) => {
   const data = req.body;
   console.log(data);
   const { token } = req;
@@ -32,13 +32,13 @@ router.post('/mpesa', mpesa.getOAuthToken, async (req, res, next) => {
     `${bs_short_code}${passkey}${timestamp}`,
   ).toString('base64');
   const transcation_type = 'CustomerPayBillOnline';
-  const amount = '1'; // you can enter any amount
-  const partyA = '254701376319'; // should follow the format:2547xxxxxxxx
+  const amount =  req.body.amount; // you can enter any amount
+  const partyA =  req.body.phone; // should follow the format:2547xxxxxxxx
   const partyB = process.env.lipa_na_mpesa_shortcode;
   const phoneNumber = data.phone; // "254725209942"; //should follow the format:2547xxxxxxxx
   const callBackUrl = 'https://quick-garage-api.herokuapp.com/mpesa/lipa-na-mpesa-callback';
-  const accountReference = 'INEX TENDER DOTE';
-  const transaction_desc = 'Payment for successful match with the closest mechanic.';
+  const accountReference = 'Paylend LTD';
+  const transaction_desc = 'Paylend Loan repayment';
 
   try {
     const { data } = await axios
@@ -64,28 +64,8 @@ router.post('/mpesa', mpesa.getOAuthToken, async (req, res, next) => {
         },
       )
       .catch(console.log);
-    const { data2 } = axios
-      .post(
-        'https://quick-garage-api.herokuapp.com/mechanicMpesa/mpesa-transactions',
-        {
-          BusinessShortCode: bs_short_code,
-          Password: password,
-          Timestamp: timestamp,
-          TransactionType: transcation_type,
-          Amount: amount,
-          PartyA: partyA,
-          PartyB: partyB,
-          PhoneNumber: phoneNumber,
-          CallBackURL: callBackUrl,
-          AccountReference: accountReference,
-          TransactionDesc: transaction_desc,
-        },
-      )
-      .catch(console.log);
-    return res.send({
-      success: true,
-      message: data,
-    });
+      console.log(url);
+
   } catch (err) {
     return res.send({
       success: false,
@@ -93,6 +73,7 @@ router.post('/mpesa', mpesa.getOAuthToken, async (req, res, next) => {
     });
   }
 });
+//
 
 // callback url
 router.post('/lipa-na-mpesa-callback', mpesa.lipaNaMpesaOnlineCallback);
